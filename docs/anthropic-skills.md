@@ -135,20 +135,81 @@ Hai cái đáng dùng ngay:
 
 ---
 
-## Chỗ Anthropic không có skill
+## C · Repo `anthropics/knowledge-work-plugins`
 
-**Không có skill nào cho việc quyết định kiến trúc.** Không có blueprint, không có
-system design, không có cắt slice, không có gap analysis.
+Kho thứ hai, xây **cho Cowork trước**, dùng được cả ở Claude Code. 98 plugin theo
+20 vai trò. Ba plugin liên quan tới làm phần mềm, tổng 25 skill:
 
-`system-architect` **không phải** skill của Anthropic:
+### `engineering` — 10 skill
 
-- Không có trong `anthropics/skills`
-- Nó là issue [#626](https://github.com/anthropics/skills/issues/626) do một người
+| Skill | Làm gì |
+|---|---|
+| `system-design` | Khung 5 bước: yêu cầu → thiết kế tổng thể → đi sâu → quy mô & độ tin cậy → phân tích đánh đổi |
+| `architecture` | Sinh ADR: Context · Decision · Options Considered · Trade-off · Consequences · Action Items |
+| `code-review` | Soát bảo mật, hiệu năng, đúng sai — N+1, injection, thiếu case biên |
+| `debug` | Tái hiện → cô lập → chẩn đoán → sửa |
+| `testing-strategy` | Chiến lược test, độ phủ, kiến trúc test |
+| `deploy-checklist` | Checklist trước khi ship, kèm điều kiện rollback |
+| `incident-response` | Phân loại mức độ → thông báo → postmortem không đổ lỗi |
+| `tech-debt` | Nhận diện, phân loại, xếp ưu tiên nợ kỹ thuật |
+| `documentation` | README, runbook, onboarding, API doc |
+| `standup` | Sinh standup từ commit/PR/ticket gần đây |
+
+### `design` — 7 skill
+
+| Skill | Làm gì |
+|---|---|
+| `design-handoff` | Spec bàn giao: layout, **bảng design token**, component props, trạng thái, responsive, edge case, animation, a11y |
+| `design-system` | Ba chế độ: audit (tên đặt lệch, **giá trị hard-code lọt ra ngoài token**), document, extend |
+| `accessibility-review` | Audit WCAG 2.1 AA: tương phản, bàn phím, vùng chạm, screen reader |
+| `design-critique` | Phản hồi có cấu trúc về khả dụng, thứ bậc, nhất quán |
+| `ux-copy` | Microcopy, thông báo lỗi, trạng thái rỗng, chữ trên nút |
+| `user-research` · `research-synthesis` | Kế hoạch phỏng vấn; gom transcript thành theme |
+
+### `product-management` — 8 skill
+
+`write-spec` (PRD: problem → goals → non-goals → user story → MoSCoW → success metrics) ·
+`product-brainstorming` · `roadmap-update` · `sprint-planning` · `synthesize-research` ·
+`competitive-brief` · `metrics-review` · `stakeholder-update`
+
+**Cài:**
+```bash
+claude plugin marketplace add anthropics/knowledge-work-plugins
+claude plugin install engineering@knowledge-work-plugins
+claude plugin install design@knowledge-work-plugins
+```
+
+Cài dạng plugin thì tên có tiền tố: `engineering:system-design`, `design:design-handoff`.
+
+### Ba đặc điểm phải biết trước khi dùng
+
+1. **Không skill nào ghi file.** Cả 25 chỉ in markdown ra chat. Muốn có artifact
+   nằm trong repo thì phải tự thêm lớp ghi file — đó là việc extension `phases`
+   của bộ kit này làm.
+2. **Không có khái niệm giai đoạn.** Mỗi skill độc lập, kích hoạt bằng
+   description matching. Thứ tự là thứ mình áp vào.
+3. **Tool-agnostic có chủ ý.** Viết theo *loại* công cụ (`~~design tool`,
+   `~~project tracker`) chứ không theo sản phẩm. Không có connector vẫn chạy —
+   chỉ mất phần tự kéo dữ liệu.
+
+License Apache-2.0, sao chép được. Nhưng **copy `product-management/LICENSE`**
+(bản sạch 202 dòng) chứ đừng copy `LICENSE` ở gốc repo: nó bị chèn 10 dòng rác
+qua PR #193.
+
+---
+
+## Đính chính: `system-architect`
+
+Bản trước của tài liệu này viết "Anthropic không có skill quyết định kiến trúc".
+**Sai** — nhận định đó chỉ đúng với repo `anthropics/skills`. `knowledge-work-plugins`
+có `system-design` và `architecture`.
+
+Còn `system-architect` thì vẫn **không** phải skill của Anthropic:
+
+- Không có trong cả hai repo
+- Là issue [#626](https://github.com/anthropics/skills/issues/626) do một người
   ngoài mở ngày 13/03/2026 — 0 comment, vẫn open
-- Các trang bán nó (`claudecowork.im`, `mcpmarket.com`) là site bên thứ ba
-
-`doc-coauthoring` là thứ gần nhất, nhưng nó lo **hình dạng tài liệu**, không lo
-**nội dung đúng hay sai**. Phần quyết định kiến trúc vẫn là người làm.
+- Các trang bán nó (`claudecowork.im`, `mcpmarket.com`) là bên thứ ba
 
 ---
 

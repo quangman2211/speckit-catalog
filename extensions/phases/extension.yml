@@ -3,8 +3,8 @@ schema_version: "1.0"
 extension:
   id: phases
   name: "Phase Skills"
-  version: "0.1.0"
-  description: "Skill theo giai doan spec/plan, cong hook tu nhan dien giai doan va goi y skill dung luc"
+  version: "0.2.0"
+  description: "Sau skill theo giai doan spec/plan — spec, kien truc, ADR, hop dong giao dien, he thiet ke, cong a11y — cong hook tu nhan dien giai doan va goi y skill dung luc"
   author: "Quang Man"
   repository: "https://github.com/quangman2211/speckit-catalog"
   license: "Apache-2.0"
@@ -27,6 +27,19 @@ provides:
       file: commands/design-handoff.md
       description: "Sinh hop dong giao dien contracts/ui.md tu plan.md — design token, component, trang thai, responsive, edge case, a11y — de ba vai lam song song khong bia giao dien"
 
+    - name: speckit.phases.write-spec
+      file: commands/write-spec.md
+      description: "Soat va lam day spec.md: van de, muc tieu do duoc, non-goals kem ly do, user story, yeu cau MoSCoW, tieu chi nghiem thu"
+    - name: speckit.phases.system-design
+      file: commands/system-design.md
+      description: "Thiet ke he thong va ghi docs/02-architecture.md — yeu cau, so do thanh phan, mo hinh du lieu, hang doi, phan tich danh doi"
+    - name: speckit.phases.design-system
+      file: commands/design-system.md
+      description: "Soat he thiet ke tim gia tri hard-code va ten dat khong nhat quan, viet tai lieu component, hoac thiet ke component moi cho khop he da co"
+    - name: speckit.phases.a11y
+      file: commands/a11y.md
+      description: "Cong WCAG 2.1 AA truoc khi implement: soat spec, plan va hop dong giao dien theo tuong phan, ban phim, vung cham, focus, screen reader"
+
   config:
     - name: "phases-config.yml"
       template: "config-template.yml"
@@ -46,6 +59,13 @@ provides:
         - bash
 
 hooks:
+  before_implement:
+    command: speckit.phases.a11y
+    optional: true
+    priority: 20
+    prompt: "Soat a11y truoc khi implement?"
+    description: "Cong WCAG chay truoc khi co code — sua luc con la chu re hon nhieu"
+
   after_plan:
     command: speckit.phases.design-handoff
     optional: true
@@ -71,3 +91,4 @@ config:
     adr_dir: "docs/04-decisions"
     ui_contract: "contracts/ui.md"
     token_file: "design-tokens.json"
+    wcag_level: "AA"

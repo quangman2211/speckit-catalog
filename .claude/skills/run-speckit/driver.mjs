@@ -209,23 +209,17 @@ async function e2e() {
       note(r.out.trim().split('\n').pop());
     });
 
-    check('ca 4 extension co mat sau install', () => {
+    check('ca 3 extension co mat sau install', () => {
       const r = spec(['extension', 'list'], at);
-      const missing = ['Git Branching', 'Coding Agent Context', 'Frontend Workflow', 'Phase Skills']
+      const missing = ['Git Branching', 'Coding Agent Context', 'Phase Skills']
         .filter((n) => !r.out.includes(n));
       return missing.length === 0 || `thieu: ${missing.join(', ')}`;
     });
 
-    check('skill frontend duoc dang ky cho Claude Code', () => {
-      const have = readdirSync(join(tmp, '.claude', 'skills')).filter((d) => d.startsWith('speckit-frontend-'));
-      note(have.join(', '));
-      return have.length === 2 || `mong doi 2 skill frontend, co ${have.length}`;
-    });
-
-    check('phases: 4 skill da dang ky', () => {
+    check('phases: 8 skill da dang ky', () => {
       const have = readdirSync(join(tmp, '.claude', 'skills')).filter((d) => d.startsWith('speckit-phases-'));
-      note(have.join(', '));
-      return have.length === 4 || `mong doi 4 skill phases, co ${have.length}`;
+      note(`${have.length}: ${have.join(', ')}`);
+      return have.length === 8 || `mong doi 8 skill phases, co ${have.length}`;
     });
 
     // `bundle install` cai extension nhung KHONG goi _refresh_events_and_warn —
@@ -271,7 +265,7 @@ async function e2e() {
     });
 
     check('token __SPECKIT_COMMAND_*__ da render thanh /speckit-*', () => {
-      const body = readFileSync(join(tmp, '.claude', 'skills', 'speckit-frontend-a11y', 'SKILL.md'), 'utf8');
+      const body = readFileSync(join(tmp, '.claude', 'skills', 'speckit-phases-a11y', 'SKILL.md'), 'utf8');
       if (body.includes('__SPECKIT_COMMAND_')) return 'con token chua render trong SKILL.md';
       return /\/speckit-implement/.test(body) || 'khong thay /speckit-implement sau khi render';
     });

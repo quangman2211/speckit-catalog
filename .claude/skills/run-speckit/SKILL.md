@@ -26,7 +26,7 @@ FATAL: '/…/speckit-catalog' khong phai spec-kit project (thieu .specify/).
 | Thành phần | Vị trí | Vai trò |
 |---|---|---|
 | Skill + driver | `speckit-catalog/.claude/skills/run-speckit/` | Bản gốc duy nhất |
-| Catalog repo | `speckit-catalog/` | Extension `frontend`, `phases` + bundle `retail-frontend` |
+| Catalog repo | `speckit-catalog/` | Extension `phases` + bundle `retail-frontend` |
 | Symlink trong project | `<project>/.claude/skills/run-speckit` | Để Claude Code thấy skill |
 | Toolchain | `<project>/.specify/`, `<project>/.claude/skills/speckit-*` | 16 skill SDD + template |
 | Constitution | `<project>/.specify/memory/constitution.md` | Luật project |
@@ -87,8 +87,8 @@ Driver làm gì bên trong:
 3. Bật `python3 -m http.server 8777` phục vụ bản sao.
 4. Tạo project spec-kit trắng trong `$TMPDIR`, `specify init`, rồi:
    - khẳng định `bundle install` **thất bại** khi chưa đăng ký catalog,
-   - đăng ký catalog, cài lại, khẳng định đủ 4 extension, 2 skill `frontend`,
-     4 skill `phases`, và hook `UserPromptSubmit` đã vào `.claude/settings.json`,
+   - đăng ký catalog, cài lại, khẳng định đủ 3 extension, 8 skill `phases`,
+     và hook `UserPromptSubmit` đã vào `.claude/settings.json`,
    - khẳng định token `__SPECKIT_COMMAND_*__` đã render thành `/speckit-*`.
 5. Dọn sạch project tạm và bản sao.
 
@@ -134,10 +134,10 @@ Làm trong repo `speckit-catalog`, **không bao giờ sửa trực tiếp trong
 cd ~/Quang-Man-Project/speckit-catalog
 # 1. sửa code trong extensions/<id>/
 # 2. bump version cho extension VÀ mọi bundle pin nó, trong một thao tác
-./scripts/bump.sh frontend 1.0.1
+./scripts/bump.sh phases 0.2.1
 # 3. sinh lại artifact + catalog.json với URL production
 ./scripts/build.sh
-git add -A && git commit -m "frontend 1.0.1: <mô tả bug fix>"
+git add -A && git commit -m "phases 0.2.1: <mô tả bug fix>"
 ```
 
 Publish: tạo GitHub release, upload `dist/*.zip`, push `catalog.json`.
@@ -162,7 +162,7 @@ extension của catalog đang có mặt trong project đó. Config đã tuỳ ch
 Thử nhanh khi đang sửa, chưa muốn bump version:
 
 ```bash
-specify extension add --dev ~/Quang-Man-Project/speckit-catalog/extensions/frontend
+specify extension add --dev ~/Quang-Man-Project/speckit-catalog/extensions/phases
 ```
 
 ## Gotchas

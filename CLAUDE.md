@@ -104,10 +104,10 @@ hình catalog sai. `e2e` khẳng định cả chiều âm: chưa đăng ký cata
 
 ```bash
 # sửa extensions/<id>/ rồi:
-./scripts/bump.sh frontend 1.0.1
+./scripts/bump.sh phases 0.2.1
 ./scripts/build.sh
 cd ../Retail-OPS && node .claude/skills/run-speckit/driver.mjs all   # verify trước khi publish
-git add -A && git commit -m "frontend 1.0.1: <mô tả>"
+git add -A && git commit -m "phases 0.2.1: <mô tả>"
 git push                                    # catalog.json phải lên `main` trước
 gh release upload latest dist/*.zip --clobber
 ```
@@ -125,7 +125,7 @@ extension cũ). Catalog bị cache 3600s không refresh được từ CLI; `upda
 nguyên config đã tuỳ chỉnh).
 
 Thử nhanh khi chưa muốn bump version:
-`specify extension add --dev <path>/extensions/frontend`.
+`specify extension add --dev <path>/extensions/phases`.
 
 Skill mới cài chỉ xuất hiện sau khi **restart Claude Code**.
 

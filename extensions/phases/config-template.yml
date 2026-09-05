@@ -14,3 +14,6 @@ adr_dir: "docs/04-decisions"
 # Hop dong giao dien va file token sinh boi speckit.phases.design-handoff
 ui_contract: "contracts/ui.md"
 token_file: "design-tokens.json"
+
+# Muc WCAG cho cong a11y: "A" | "AA" | "AAA"
+wcag_level: "AA"

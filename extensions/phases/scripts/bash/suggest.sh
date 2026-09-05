@@ -61,6 +61,7 @@ case "$NEXT" in
   ui_contract)  CMD="/speckit-phases-design-handoff"  ; WHY="Chua co contracts/ui.md. Ba vai lam song song se tu bia giao dien." ;;
   tokens)       CMD="/speckit-phases-design-handoff"  ; WHY="Co contracts/ui.md nhung thieu design-tokens.json — cong a11y va component contract dang tro vao file khong ton tai." ;;
   tasks)        CMD="/speckit-tasks"                  ; WHY="Plan da co nhung chua chia task." ;;
+  a11y)         CMD="/speckit-phases-a11y"            ; WHY="Co hop dong giao dien nhung chua soat a11y. Sua luc con la chu re hon nhieu lan sua khi da thanh component." ;;
   *) exit 0 ;;
 esac
 

@@ -1,5 +1,0 @@
-# Development-only files, khong copy khi user cai extension
-tests/
-.github/
-*.log
-__pycache__/

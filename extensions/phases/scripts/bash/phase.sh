@@ -41,11 +41,12 @@ SLICE_DIR=""
 [ -n "$SLICE" ] && SLICE_DIR="specs/$SLICE"
 
 # ---------------------------------------------------------------- artifact
-has_spec=0; has_plan=0; has_tasks=0
+has_spec=0; has_plan=0; has_tasks=0; has_a11y=0
 if [ -n "$SLICE_DIR" ]; then
   [ -f "$SLICE_DIR/spec.md" ]  && has_spec=1
   [ -f "$SLICE_DIR/plan.md" ]  && has_plan=1
   [ -f "$SLICE_DIR/tasks.md" ] && has_tasks=1
+  [ -f "$SLICE_DIR/a11y-review.md" ] && has_a11y=1
 fi
 
 # Artifact cap project (dung chung moi slice)
@@ -93,6 +94,7 @@ case "$PHASE" in
     [ "$has_ui" = "0" ]     && add_missing "ui_contract"
     [ "$has_ui" = "1" ] && [ "$has_tokens" = "0" ] && add_missing "tokens"
     [ "$has_tasks" = "0" ]  && add_missing "tasks"
+    [ "$has_ui" = "1" ] && [ "$has_a11y" = "0" ] && add_missing "a11y"
     ;;
 esac
 
@@ -107,6 +109,7 @@ cat <<JSON
     "spec": $(json_bool "$has_spec"),
     "plan": $(json_bool "$has_plan"),
     "tasks": $(json_bool "$has_tasks"),
+    "a11y_review": $(json_bool "$has_a11y"),
     "architecture": $(json_bool "$has_arch"),
     "ui_contract": $(json_bool "$has_ui"),
     "tokens": $(json_bool "$has_tokens"),

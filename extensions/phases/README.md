@@ -17,8 +17,12 @@ Ranh gioi la `plan.md`:
 | Lenh | Giai doan | Ghi ra |
 |---|---|---|
 | `/speckit-phases-status` | ca hai | — (chi bao cao) |
+| `/speckit-phases-write-spec` | **spec** | bo sung `specs/NNN/spec.md` |
+| `/speckit-phases-system-design` | plan | `docs/02-architecture.md` |
 | `/speckit-phases-architecture` | plan | `docs/04-decisions/ADR-NNN-*.md` |
 | `/speckit-phases-design-handoff` | plan | `contracts/ui.md` + `design-tokens.json` |
+| `/speckit-phases-design-system` | plan | `contracts/ui-audit.md` |
+| `/speckit-phases-a11y` | plan | `specs/NNN/a11y-review.md` |
 
 `/speckit-phases-suggest` la lenh noi bo — hook tu goi, khong can go tay.
 
@@ -62,6 +66,7 @@ Tat hoan toan: dat `enabled: false` trong
 | `adr_dir` | `docs/04-decisions` | noi dat ADR |
 | `ui_contract` | `contracts/ui.md` | hop dong giao dien |
 | `token_file` | `design-tokens.json` | file token, cong a11y tro vao day |
+| `wcag_level` | `AA` | muc WCAG cho cong a11y |
 
 ## Nhan dien giai doan dung chung
 

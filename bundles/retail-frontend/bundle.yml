@@ -3,7 +3,7 @@ schema_version: "1.0"
 bundle:
   id: "retail-frontend"
   name: "Retail Frontend"
-  version: "1.1.0"
+  version: "1.2.0"
   role: "developer"
   description: "Bo Spec-Driven Development cho team frontend Retail-OPS: cong a11y, hop dong giao dien, ADR, va hook goi y theo giai doan"
   author: "Quang Man"
@@ -20,9 +20,7 @@ provides:
       version: "1.0.0"
     - id: "agent-context"
       version: "1.0.0"
-    - id: "frontend"
-      version: "1.0.0"
     - id: "phases"
-      version: "0.1.0"
+      version: "0.2.0"
 
 tags: ["retail", "frontend", "sdd"]

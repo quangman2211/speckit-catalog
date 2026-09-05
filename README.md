@@ -7,7 +7,6 @@ catalog extension nội bộ, bundle, và skill `run-speckit` để chạy/verif
 .claude/skills/run-speckit/   # skill + driver — bản gốc duy nhất
   SKILL.md
   driver.mjs
-extensions/frontend/          # source extension
 extensions/phases/            # skill theo giai doan + hook goi y
 bundles/retail-frontend/      # bundle manifest (KHÔNG chứa payload)
 scripts/bump.sh               # bump version extension + mọi bundle pin nó
@@ -51,7 +50,7 @@ specify integration upgrade claude    # noi hook `events:` — bundle install kh
 ```
 
 Catalog public nên không cần token. Chưa đăng ký catalog thì `bundle install` báo
-`Extension 'frontend' not found in any catalog` — extension tự viết không đi kèm bundle.
+`Extension 'phases' not found in any catalog` — extension tự viết không đi kèm bundle.
 
 ## Chạy và verify
 
@@ -96,9 +95,9 @@ bao giờ bị ghi đè bằng URL localhost.
 
 ```bash
 # sửa code trong extensions/<id>/ rồi:
-./scripts/bump.sh frontend 1.0.1   # bump extension + pin trong mọi bundle + version bundle
+./scripts/bump.sh phases 0.2.1   # bump extension + pin trong mọi bundle + version bundle
 ./scripts/build.sh                 # artifact + catalog.json với URL production
-git add -A && git commit -m "frontend 1.0.1: <mô tả>"
+git add -A && git commit -m "phases 0.2.1: <mô tả>"
 ```
 
 Rồi đẩy artifact lên release. Tag `latest` là **rolling** — `catalog.json` luôn trỏ
