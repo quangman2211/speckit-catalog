@@ -6,7 +6,7 @@ extension:
   version: "1.0.0"
   description: "Component contract, a11y audit va design-token check cho spec frontend"
   author: "Quang Man"
-  repository: "https://github.com/quangman/speckit-catalog"
+  repository: "https://github.com/quangman2211/speckit-catalog"
   license: "MIT"
 
 requires:

@@ -6,8 +6,8 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PROD_BASE_URL="https://github.com/quangman/speckit-catalog/releases/download/latest"
-PROD_CATALOG_URL="https://raw.githubusercontent.com/quangman/speckit-catalog/main/catalog.json"
+PROD_BASE_URL="https://github.com/quangman2211/speckit-catalog/releases/download/latest"
+PROD_CATALOG_URL="https://raw.githubusercontent.com/quangman2211/speckit-catalog/main/catalog.json"
 BASE_URL="${1:-$PROD_BASE_URL}"
 CATALOG_URL="${2:-$PROD_CATALOG_URL}"
 DIST="$ROOT/dist"
