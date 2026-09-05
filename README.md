@@ -5,6 +5,7 @@ Catalog nội bộ chứa extension và bundle Spec Kit do team tự viết và 
 ```
 extensions/frontend/        # source extension
 bundles/retail-frontend/    # bundle manifest (không chứa payload)
+scripts/bump.sh             # bump version extension + mọi bundle pin nó
 scripts/build.sh            # zip extension + sinh catalog.json + build bundle
 catalog.json                # sinh ra, KHÔNG sửa tay
 dist/                       # artifact, gitignored
@@ -37,9 +38,28 @@ specify extension catalog add http://localhost:8777/catalog.json \
 
 Harness tự động hoá việc này nằm ở `Retail-OPS/.claude/skills/run-speckit/driver.mjs`.
 
-## Publish
+## Phát hành version mới
 
-1. Bump `version` trong `extensions/<id>/extension.yml` **và** trong mọi
-   `bundles/*/bundle.yml` tham chiếu tới nó — version pin phải khớp tuyệt đối.
-2. `./scripts/build.sh` với URL production.
-3. Commit `catalog.json`, tạo GitHub release, upload `dist/*.zip`.
+```bash
+# sửa code trong extensions/<id>/ rồi:
+./scripts/bump.sh frontend 1.0.1   # bump extension + pin trong mọi bundle + version bundle
+./scripts/build.sh                 # sinh artifact + catalog.json với URL production
+git add -A && git commit -m "frontend 1.0.1: <mô tả>"
+```
+
+Rồi tạo GitHub release và upload `dist/*.zip`.
+
+Đừng bump bằng tay: version pin được kiểm tra lúc `bundle install`, bump extension
+mà quên bump pin sẽ làm mọi lần install bundle báo lỗi
+`is pinned to version A ... but the resolved version is B`.
+
+## Đẩy version mới vào các project đang dùng
+
+```bash
+cd ../Retail-OPS
+node .claude/skills/run-speckit/driver.mjs update /đường/dẫn/project
+```
+
+Không dùng `specify extension update` — nó hỏi `[y/N]` (không có `--yes`) và catalog
+bị cache 1 giờ nên thường báo "Up to date" sai. Cũng đừng trông vào việc cài lại
+bundle: idempotent theo id nên extension cũ bị giữ nguyên trong im lặng.
