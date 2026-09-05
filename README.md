@@ -36,6 +36,21 @@ ln -s ../../../speckit-catalog/.claude/skills/run-speckit run-speckit
 
 Đã dựng sẵn cho `Retail-OPS`. Restart Claude Code để `/run-speckit` xuất hiện.
 
+## Cài cho một dev mới
+
+```bash
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git --force
+
+cd <project>
+specify extension catalog add \
+  https://raw.githubusercontent.com/quangman2211/speckit-catalog/main/catalog.json \
+  --name quangman --priority 1 --install-allowed
+specify bundle install retail-frontend
+```
+
+Catalog public nên không cần token. Chưa đăng ký catalog thì `bundle install` báo
+`Extension 'frontend' not found in any catalog` — extension tự viết không đi kèm bundle.
+
 ## Chạy và verify
 
 Project đích là thư mục đang đứng (`cwd`), hoặc tham số thứ hai.
@@ -84,7 +99,14 @@ bao giờ bị ghi đè bằng URL localhost.
 git add -A && git commit -m "frontend 1.0.1: <mô tả>"
 ```
 
-Rồi tạo GitHub release và upload `dist/*.zip`.
+Rồi đẩy artifact lên release. Tag `latest` là **rolling** — `catalog.json` luôn trỏ
+tới nó, nên lần đầu dùng `create`, các lần sau phải `upload --clobber` (asset trùng
+tên sẽ bị từ chối nếu thiếu `--clobber`):
+
+```bash
+git push
+gh release upload latest dist/*.zip --clobber
+```
 
 Đừng bump bằng tay: version pin được kiểm tra lúc `bundle install`, bump extension mà
 quên bump pin sẽ làm mọi lần install bundle báo lỗi

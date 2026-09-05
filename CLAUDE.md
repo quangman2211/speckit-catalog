@@ -108,11 +108,14 @@ hình catalog sai. `e2e` khẳng định cả chiều âm: chưa đăng ký cata
 ./scripts/build.sh
 cd ../Retail-OPS && node .claude/skills/run-speckit/driver.mjs all   # verify trước khi publish
 git add -A && git commit -m "frontend 1.0.1: <mô tả>"
-# tạo GitHub release tag `latest`, upload dist/*.zip, push catalog.json
+git push                                    # catalog.json phải lên `main` trước
+gh release upload latest dist/*.zip --clobber
 ```
 
-`download_url` trong catalog trỏ tới release tag `latest`, nên release phải được
-cập nhật cùng lúc với `catalog.json`.
+Remote: `quangman2211/speckit-catalog` (public). `catalog_url` là raw của nhánh
+`main`, `download_url` trỏ tới **rolling tag `latest`** — nên release và
+`catalog.json` phải cập nhật cùng lúc, và `--clobber` là bắt buộc vì asset trùng tên.
+Catalog public: dev khác không cần token.
 
 Đẩy vào project đang dùng: `node <driver> update [project]`. **Đừng dùng
 `specify extension update`** (interactive, không có `--yes`, abort khi không TTY) và
