@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "updated_at": "2026-09-05",
-  "catalog_url": "http://localhost:8777/catalog.json",
+  "catalog_url": "https://raw.githubusercontent.com/quangman/speckit-catalog/main/catalog.json",
   "extensions": {
     "frontend": {
       "id": "frontend",
@@ -10,7 +10,7 @@
       "description": "Component contract, a11y audit va design-token check cho spec frontend",
       "author": "Quang Man",
       "license": "MIT",
-      "download_url": "http://localhost:8777/dist/frontend-1.0.0.zip",
+      "download_url": "https://github.com/quangman/speckit-catalog/releases/download/latest/frontend-1.0.0.zip",
       "requires": {
         "speckit_version": ">=0.9.0",
         "commands": [
