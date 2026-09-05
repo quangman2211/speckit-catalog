@@ -24,6 +24,25 @@
         "design-system"
       ],
       "repository": "https://github.com/quangman2211/speckit-catalog"
+    },
+    "phases": {
+      "id": "phases",
+      "name": "Phase Skills",
+      "version": "0.1.0",
+      "description": "Skill theo giai doan spec/plan, cong hook tu nhan dien giai doan va goi y skill dung luc",
+      "author": "Quang Man",
+      "license": "Apache-2.0",
+      "download_url": "https://github.com/quangman2211/speckit-catalog/releases/download/latest/phases-0.1.0.zip",
+      "requires": {
+        "speckit_version": ">=0.9.0"
+      },
+      "tags": [
+        "sdd",
+        "phases",
+        "architecture",
+        "design-system"
+      ],
+      "repository": "https://github.com/quangman2211/speckit-catalog"
     }
   }
 }

@@ -1,0 +1,6 @@
+# File chi dung luc phat trien, khong copy sang project cua nguoi dung
+tests/
+.github/
+*.log
+__pycache__/
+.hint-state

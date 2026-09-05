@@ -26,7 +26,7 @@ FATAL: '/…/speckit-catalog' khong phai spec-kit project (thieu .specify/).
 | Thành phần | Vị trí | Vai trò |
 |---|---|---|
 | Skill + driver | `speckit-catalog/.claude/skills/run-speckit/` | Bản gốc duy nhất |
-| Catalog repo | `speckit-catalog/` | Extension `frontend` + bundle `retail-frontend` |
+| Catalog repo | `speckit-catalog/` | Extension `frontend`, `phases` + bundle `retail-frontend` |
 | Symlink trong project | `<project>/.claude/skills/run-speckit` | Để Claude Code thấy skill |
 | Toolchain | `<project>/.specify/`, `<project>/.claude/skills/speckit-*` | 16 skill SDD + template |
 | Constitution | `<project>/.specify/memory/constitution.md` | Luật project |
@@ -87,13 +87,14 @@ Driver làm gì bên trong:
 3. Bật `python3 -m http.server 8777` phục vụ bản sao.
 4. Tạo project spec-kit trắng trong `$TMPDIR`, `specify init`, rồi:
    - khẳng định `bundle install` **thất bại** khi chưa đăng ký catalog,
-   - đăng ký catalog, cài lại, khẳng định đủ 3 extension và 2 skill `frontend`,
+   - đăng ký catalog, cài lại, khẳng định đủ 4 extension, 2 skill `frontend`,
+     4 skill `phases`, và hook `UserPromptSubmit` đã vào `.claude/settings.json`,
    - khẳng định token `__SPECKIT_COMMAND_*__` đã render thành `/speckit-*`.
 5. Dọn sạch project tạm và bản sao.
 
 Đổi cổng khi 8777 bận: `SPECKIT_CATALOG_PORT=9001 node .claude/skills/run-speckit/driver.mjs all`
 
-Output đã verify (15/15 pass):
+Output đã verify:
 
 ```
 doctor — toolchain va cau truc project
@@ -205,6 +206,18 @@ separator khác nhau. Dùng token `__SPECKIT_COMMAND_PLAN__`; driver có check k
 
 **`~/.local/bin` không chắc nằm trong PATH của tiến trình con.** Driver tự dò
 `specify` rồi fallback sang `~/.local/bin/specify`.
+
+**`bundle install` không nối hook `events:` — phải chạy thêm một lệnh.** Extension
+khai báo khối `events:` sẽ ghi một hook thật vào `.claude/settings.json`, nhưng chỉ khi
+đi qua `extension add/remove/update` hoặc `init`. Hàm `_refresh_events_and_warn` **không
+được bundler gọi** (`extensions/_commands.py:164`), nên cài bằng bundle thì extension có
+mặt mà hook thì không. Nối lại bằng:
+
+```bash
+specify integration upgrade claude      # hoac: specify extension add <id> --force
+```
+
+`driver.mjs update` đã làm sẵn (nó chạy `extension add --force` cho mọi extension).
 
 **Skill mới cài không xuất hiện tới khi restart Claude Code.**
 

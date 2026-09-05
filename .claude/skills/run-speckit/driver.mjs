@@ -9,7 +9,7 @@
 // Thoat 0 khi moi check pass, 1 khi co check that bai, 2 khi thieu tien de.
 
 import { execFileSync, spawn } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, mkdtempSync, rmSync, statSync } from 'node:fs';
 import { join, resolve, dirname, extname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -174,7 +174,11 @@ async function e2e() {
   head('e2e — cai catalog + bundle tren project TRANG');
   note('phai dung project trang: neu extension da cai san, bundle install se skip va che giau loi catalog');
 
-  const art = join(STAGE, 'dist', 'retail-frontend-1.0.0.zip');
+  const dist = join(STAGE, 'dist');
+  const bundleZip = existsSync(dist)
+    ? readdirSync(dist).filter((f) => f.startsWith('retail-frontend-') && f.endsWith('.zip')).sort().pop()
+    : null;
+  const art = bundleZip ? join(dist, bundleZip) : join(dist, 'retail-frontend.zip');
   if (!existsSync(art)) { bad('bundle artifact ton tai', 'chua build — chay `build` truoc `e2e`'); return; }
 
   let tmp;
@@ -205,9 +209,9 @@ async function e2e() {
       note(r.out.trim().split('\n').pop());
     });
 
-    check('ca 3 extension co mat sau install', () => {
+    check('ca 4 extension co mat sau install', () => {
       const r = spec(['extension', 'list'], at);
-      const missing = ['Git Branching', 'Coding Agent Context', 'Frontend Workflow']
+      const missing = ['Git Branching', 'Coding Agent Context', 'Frontend Workflow', 'Phase Skills']
         .filter((n) => !r.out.includes(n));
       return missing.length === 0 || `thieu: ${missing.join(', ')}`;
     });
@@ -216,6 +220,54 @@ async function e2e() {
       const have = readdirSync(join(tmp, '.claude', 'skills')).filter((d) => d.startsWith('speckit-frontend-'));
       note(have.join(', '));
       return have.length === 2 || `mong doi 2 skill frontend, co ${have.length}`;
+    });
+
+    check('phases: 4 skill da dang ky', () => {
+      const have = readdirSync(join(tmp, '.claude', 'skills')).filter((d) => d.startsWith('speckit-phases-'));
+      note(have.join(', '));
+      return have.length === 4 || `mong doi 4 skill phases, co ${have.length}`;
+    });
+
+    // `bundle install` cai extension nhung KHONG goi _refresh_events_and_warn —
+    // ham do chi duoc goi tu `extension add/remove/update` va `init`. Khoi
+    // `events:` vi vay khong duoc ghi ra .claude/settings.json. Ghim hanh vi
+    // nay lai de biet ngay khi upstream sua.
+    check('bundle install CHUA ghi hook (gap da biet cua specify)', () => {
+      const p = join(tmp, '.claude', 'settings.json');
+      if (!existsSync(p)) return true;
+      const s = JSON.parse(readFileSync(p, 'utf8'));
+      const has = ((s.hooks && s.hooks.UserPromptSubmit) || [])
+        .flatMap((e) => (e.hooks || []).map((h) => h.command || ''))
+        .some((c) => c.includes('speckit.phases.suggest'));
+      return !has || 'upstream da sua: bundle install nay tu ghi hook — bo buoc noi day o README';
+    });
+
+    check('noi hook bang `integration upgrade claude`', () => {
+      const r = spec(['integration', 'upgrade', 'claude'], at);
+      return r.code === 0 || r.out;
+    });
+
+    check('phases: hook UserPromptSubmit da ghi vao .claude/settings.json', () => {
+      const p = join(tmp, '.claude', 'settings.json');
+      if (!existsSync(p)) return 'khong co .claude/settings.json — khoi `events:` khong duoc ghi';
+      const s = JSON.parse(readFileSync(p, 'utf8'));
+      const entries = (s.hooks && s.hooks.UserPromptSubmit) || [];
+      const cmds = entries.flatMap((e) => (e.hooks || []).map((h) => h.command || ''));
+      note(cmds.join(' | ') || '(rong)');
+      return cmds.some((c) => c.includes('speckit.phases.suggest')) || 'khong thay hook speckit.phases.suggest';
+    });
+
+    check('phases: script co bit +x va chay duoc', () => {
+      const dir = join(tmp, '.specify', 'extensions', 'phases', 'scripts', 'bash');
+      if (!existsSync(dir)) return 'khong thay scripts/bash cua phases';
+      const shs = readdirSync(dir).filter((f) => f.endsWith('.sh'));
+      const notExec = shs.filter((f) => !(statSync(join(dir, f)).mode & 0o111));
+      if (notExec.length) return `thieu bit +x: ${notExec.join(', ')}`;
+      const r = run(join(dir, 'phase.sh'), [tmp]);
+      if (r.code !== 0) return `phase.sh loi: ${r.out}`;
+      const phase = JSON.parse(r.out).phase;
+      note(`${shs.length} script, phase.sh -> "${phase}"`);
+      return phase === 'spec' || `mong doi phase "spec" tren project vua init, nhan "${phase}"`;
     });
 
     check('token __SPECKIT_COMMAND_*__ da render thanh /speckit-*', () => {

@@ -8,6 +8,7 @@ catalog extension nội bộ, bundle, và skill `run-speckit` để chạy/verif
   SKILL.md
   driver.mjs
 extensions/frontend/          # source extension
+extensions/phases/            # skill theo giai doan + hook goi y
 bundles/retail-frontend/      # bundle manifest (KHÔNG chứa payload)
 scripts/bump.sh               # bump version extension + mọi bundle pin nó
 scripts/build.sh              # zip extension + sinh catalog.json + build bundle
@@ -46,6 +47,7 @@ specify extension catalog add \
   https://raw.githubusercontent.com/quangman2211/speckit-catalog/main/catalog.json \
   --name quangman --priority 1 --install-allowed
 specify bundle install retail-frontend
+specify integration upgrade claude    # noi hook `events:` — bundle install khong tu lam
 ```
 
 Catalog public nên không cần token. Chưa đăng ký catalog thì `bundle install` báo
@@ -57,7 +59,7 @@ Project đích là thư mục đang đứng (`cwd`), hoặc tham số thứ hai.
 
 ```bash
 cd <project>
-node .claude/skills/run-speckit/driver.mjs all       # 21 check, exit 0 khi sạch
+node .claude/skills/run-speckit/driver.mjs all       # toàn bộ, exit 0 khi sạch
 node .claude/skills/run-speckit/driver.mjs doctor    # toolchain + cấu trúc
 node .claude/skills/run-speckit/driver.mjs build     # đóng gói trên bản sao tạm
 node .claude/skills/run-speckit/driver.mjs e2e       # cài trên project TRẮNG

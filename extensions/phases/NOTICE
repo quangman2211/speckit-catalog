@@ -1,0 +1,29 @@
+Phase Skills (extension `phases`)
+Copyright 2026 Quang Man
+
+Extension nay chua tac pham phai sinh tu:
+
+    knowledge-work-plugins
+    Copyright Anthropic PBC
+    https://github.com/anthropics/knowledge-work-plugins
+    Cap phep theo Apache License 2.0 (xem file LICENSE).
+
+Cac file duoi day duoc sao chep tu repo tren VA DA BI SUA DOI:
+
+    commands/architecture.md
+        nguon: engineering/skills/architecture/SKILL.md
+        sua:   them lop ghi file va danh so ADR, them rang buoc giai doan PLAN,
+               them muc "nam cua mot chieu", bo phan connector, dich sang
+               tieng Viet.
+
+    commands/design-handoff.md
+        nguon: design/skills/design-handoff/SKILL.md
+        sua:   doi nguon dau vao tu Figma sang plan.md, them lop ghi
+               contracts/ui.md va design-tokens.json, them "bon trang thai bat
+               buoc" (co trang thai du lieu cu), them ban do ma loi sang chu
+               hien thi, bo phan connector, dich sang tieng Viet.
+
+Moi file khac trong extension nay la ban goc.
+
+Anthropic PBC khong bao tro, khong tham gia, va khong chiu trach nhiem ve
+extension nay.

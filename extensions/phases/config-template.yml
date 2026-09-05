@@ -1,0 +1,16 @@
+# Phase Skills — cau hinh
+# Copy sang phases-config.yml de tuy chinh (lenh cai tu lam viec nay).
+
+# Bat/tat hook goi y. false = hook im lang hoan toan.
+enabled: true
+
+# So luot cho truoc khi nhac lai CUNG MOT goi y. Goi y doi noi dung thi in ngay,
+# khong cho. Dat cao neu thay on.
+repeat_after: 10
+
+# Noi dat ADR sinh boi speckit.phases.architecture
+adr_dir: "docs/04-decisions"
+
+# Hop dong giao dien va file token sinh boi speckit.phases.design-handoff
+ui_contract: "contracts/ui.md"
+token_file: "design-tokens.json"

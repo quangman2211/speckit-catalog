@@ -1,0 +1,73 @@
+schema_version: "1.0"
+
+extension:
+  id: phases
+  name: "Phase Skills"
+  version: "0.1.0"
+  description: "Skill theo giai doan spec/plan, cong hook tu nhan dien giai doan va goi y skill dung luc"
+  author: "Quang Man"
+  repository: "https://github.com/quangman2211/speckit-catalog"
+  license: "Apache-2.0"
+
+requires:
+  speckit_version: ">=0.9.0"
+
+provides:
+  commands:
+    - name: speckit.phases.status
+      file: commands/status.md
+      description: "Bao dang o giai doan nao, thieu artifact gi, nen chay lenh gi tiep"
+    - name: speckit.phases.suggest
+      file: commands/suggest.md
+      description: "Noi bo: hook user_prompt_submit tu goi. Khong can goi tay"
+    - name: speckit.phases.architecture
+      file: commands/architecture.md
+      description: "Ghi mot quyet dinh kien truc thanh ADR co danh so trong docs/04-decisions/, kem cac phuong an da can nhac va he qua"
+    - name: speckit.phases.design-handoff
+      file: commands/design-handoff.md
+      description: "Sinh hop dong giao dien contracts/ui.md tu plan.md — design token, component, trang thai, responsive, edge case, a11y — de ba vai lam song song khong bia giao dien"
+
+  config:
+    - name: "phases-config.yml"
+      template: "config-template.yml"
+      description: "Bat/tat goi y va dat nhip nhac lai"
+      required: false
+
+  scripts:
+    - name: phase
+      file: scripts/bash/phase.sh
+      description: "Nhan dien giai doan, in JSON trang thai"
+      runtimes:
+        - bash
+    - name: suggest
+      file: scripts/bash/suggest.sh
+      description: "Hook entry: format goi y tu trang thai"
+      runtimes:
+        - bash
+
+hooks:
+  after_plan:
+    command: speckit.phases.design-handoff
+    optional: true
+    priority: 20
+    prompt: "Sinh hop dong giao dien contracts/ui.md tu plan vua tao?"
+    description: "Hop dong UI phai co truoc khi ba vai lam song song"
+
+events:
+  user_prompt_submit:
+    command: speckit.phases.suggest
+    timeout: 10
+
+tags:
+  - "sdd"
+  - "phases"
+  - "architecture"
+  - "design-system"
+
+config:
+  defaults:
+    enabled: true
+    repeat_after: 10
+    adr_dir: "docs/04-decisions"
+    ui_contract: "contracts/ui.md"
+    token_file: "design-tokens.json"
