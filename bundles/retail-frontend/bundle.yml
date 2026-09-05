@@ -1,0 +1,26 @@
+schema_version: "1.0"
+
+bundle:
+  id: "retail-frontend"
+  name: "Retail Frontend"
+  version: "1.0.0"
+  role: "developer"
+  description: "Bo Spec-Driven Development cho team frontend Retail-OPS"
+  author: "Quang Man"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=0.9.0"
+  tools: []
+  mcp: []
+
+provides:
+  extensions:
+    - id: "git"
+      version: "1.0.0"
+    - id: "agent-context"
+      version: "1.0.0"
+    - id: "frontend"
+      version: "1.0.0"
+
+tags: ["retail", "frontend", "sdd"]

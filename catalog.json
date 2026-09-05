@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-09-05",
+  "catalog_url": "http://localhost:8777/catalog.json",
+  "extensions": {
+    "frontend": {
+      "id": "frontend",
+      "name": "Frontend Workflow",
+      "version": "1.0.0",
+      "description": "Component contract, a11y audit va design-token check cho spec frontend",
+      "author": "Quang Man",
+      "license": "MIT",
+      "download_url": "http://localhost:8777/dist/frontend-1.0.0.zip",
+      "requires": {
+        "speckit_version": ">=0.9.0",
+        "commands": [
+          "speckit.plan"
+        ]
+      },
+      "tags": [
+        "frontend",
+        "ui",
+        "a11y",
+        "design-system"
+      ],
+      "repository": "https://github.com/quangman/speckit-catalog"
+    }
+  }
+}
