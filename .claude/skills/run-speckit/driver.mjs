@@ -179,9 +179,9 @@ async function e2e() {
 
   const dist = join(STAGE, 'dist');
   const bundleZip = existsSync(dist)
-    ? readdirSync(dist).filter((f) => f.startsWith('retail-sdd-') && f.endsWith('.zip')).sort().pop()
+    ? readdirSync(dist).filter((f) => f.startsWith('qm-sdd-') && f.endsWith('.zip')).sort().pop()
     : null;
-  const art = bundleZip ? join(dist, bundleZip) : join(dist, 'retail-sdd.zip');
+  const art = bundleZip ? join(dist, bundleZip) : join(dist, 'qm-sdd.zip');
   if (!existsSync(art)) { bad('bundle artifact ton tai', 'chua build — chay `build` truoc `e2e`'); return; }
 
   let tmp;
@@ -217,7 +217,7 @@ async function e2e() {
     // "not found in any configured catalog" trong khi cai theo path van chay,
     // nen huong dan sai ma e2e van xanh.
     check('bundle install THEO TEN sau khi co ca hai catalog', () => {
-      const r = spec(['bundle', 'install', 'retail-sdd'], at);
+      const r = spec(['bundle', 'install', 'qm-sdd'], at);
       if (r.code !== 0) return r.out;
       note(r.out.trim().split('\n').pop());
     });

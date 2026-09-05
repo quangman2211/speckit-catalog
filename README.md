@@ -8,7 +8,7 @@ catalog extension nội bộ, bundle, và skill `run-speckit` để chạy/verif
   SKILL.md
   driver.mjs
 extensions/masterplan/        # tầng dự án: blueprint → kiến trúc → hợp đồng → roadmap → lát
-bundles/retail-sdd/           # bundle manifest (KHÔNG chứa payload)
+bundles/qm-sdd/           # bundle manifest (KHÔNG chứa payload)
 scripts/bump.sh               # bump version extension + mọi bundle pin nó
 scripts/build.sh              # zip extension + sinh catalog.json + build bundle
 catalog.json                  # catalog extension — sinh ra, KHÔNG sửa tay
@@ -70,7 +70,7 @@ Không phải gõ nhầm: extension catalog dùng `--name` + cờ `--install-all
 còn bundle catalog dùng `--id` + `--policy install-allowed`.
 
 Bỏ dòng đầu thì báo `Extension 'masterplan' not found in any catalog`; bỏ dòng
-sau thì báo `Bundle 'retail-sdd' was not found in any configured catalog`.
+sau thì báo `Bundle 'qm-sdd' was not found in any configured catalog`.
 Extension và bundle tự viết đều không đi kèm trong artifact — bắt buộc qua catalog.
 
 `--priority 1` để catalog của mình thắng catalog mặc định của spec-kit khi trùng
@@ -82,7 +82,7 @@ tên. Chuyện này có thật: community catalog của spec-kit có sẵn một
 Cả bộ (`git` + `agent-context` + `masterplan`):
 
 ```bash
-specify bundle install retail-sdd
+specify bundle install qm-sdd
 ```
 
 Hoặc chỉ riêng `masterplan` (không cần bundle catalog):
@@ -235,9 +235,9 @@ Cũng đừng trông vào việc cài lại bundle mới — nó báo thành cô
 extension cũ:
 
 ```
-✓ Installed 'retail-sdd' (0 added, 3 already present).
+✓ Installed 'qm-sdd' (0 added, 3 already present).
   ✓ Masterplan (v0.1.0)            ← vẫn bản cũ
-  retail-sdd v2.1.0                ← bundle báo 2.1.0
+  qm-sdd v2.1.0                ← bundle báo 2.1.0
 ```
 
 Chi tiết đầy đủ các bẫy nằm ở `.claude/skills/run-speckit/SKILL.md`.

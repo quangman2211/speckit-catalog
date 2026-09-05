@@ -26,7 +26,7 @@ FATAL: '/…/speckit-catalog' khong phai spec-kit project (thieu .specify/).
 | Thành phần | Vị trí | Vai trò |
 |---|---|---|
 | Skill + driver | `speckit-catalog/.claude/skills/run-speckit/` | Bản gốc duy nhất |
-| Catalog repo | `speckit-catalog/` | Extension `masterplan` + bundle `retail-sdd` |
+| Catalog repo | `speckit-catalog/` | Extension `masterplan` + bundle `qm-sdd` |
 | Symlink trong project | `<project>/.claude/skills/run-speckit` | Để Claude Code thấy skill |
 | Toolchain | `<project>/.specify/`, `<project>/.claude/skills/speckit-*` | 16 skill SDD + template |
 | Constitution | `<project>/.specify/memory/constitution.md` | Luật project |
@@ -174,7 +174,7 @@ specify extension add --dev ~/Quang-Man-Project/speckit-catalog/extensions/maste
 
 ## Gotchas
 
-**Bundle không chứa payload của extension.** Artifact `retail-sdd-1.0.0.zip`
+**Bundle không chứa payload của extension.** Artifact `qm-sdd-1.0.0.zip`
 chỉ có đúng 2 file (`bundle.yml` + `README.md`). Lúc install, `specify` chỉ giải
 quyết extension theo 2 đường: extension ship sẵn trong `specify-cli`, hoặc catalog
 đang active có `install_allowed`. Không có đường đọc payload từ thư mục bundle.
@@ -201,7 +201,7 @@ unreachable); reference left unchecked.` Chỉ `bundle install` trên project tr
 là bằng chứng.
 
 **`bundle install <path>` với path không tồn tại bị hiểu là bundle id**, và lỗi trả
-về gây hiểu nhầm: `Bundle '/…/retail-sdd-1.0.0.zip' was not found in any
+về gây hiểu nhầm: `Bundle '/…/qm-sdd-1.0.0.zip' was not found in any
 configured catalog.` Kiểm tra file có tồn tại trước.
 
 **`scripts/build.sh` chạy `rm -rf dist/`.** Nó phải build bundle artifact *sau* khi
@@ -247,12 +247,12 @@ vẫn tải version mới, và **giữ nguyên config đã tuỳ chỉnh**
 hiểm nhất. Kiểm tra idempotent theo **id**, không so version:
 
 ```
-$ specify bundle install retail-sdd-1.1.0.zip
-✓ Installed 'retail-sdd' (0 added, 3 already present).
+$ specify bundle install qm-sdd-1.1.0.zip
+✓ Installed 'qm-sdd' (0 added, 3 already present).
 $ specify extension list | grep Frontend
   ✓ Frontend Workflow (v1.0.0)     <-- van la ban cu, bug fix khong vao
 $ specify bundle list | grep retail
-  retail-sdd v1.1.0           <-- bundle bao 1.1.0
+  qm-sdd v1.1.0           <-- bundle bao 1.1.0
 ```
 
 Bundle ghi nhận 1.1.0, pin frontend 1.0.1, nhưng project thực tế vẫn chạy 1.0.0.
@@ -265,7 +265,7 @@ hai cùng lúc thay vì sửa tay.
 
 **`specify bundle update <id>` cần bundle nằm trong một *bundle catalog*.** Bundle
 cài từ file `.zip` local không update theo id được:
-`Error: Bundle 'retail-sdd' was not found in any configured catalog.`
+`Error: Bundle 'qm-sdd' was not found in any configured catalog.`
 Với phân phối local, đường cập nhật là cài lại artifact mới rồi `driver.mjs update`.
 
 ## Troubleshooting

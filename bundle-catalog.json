@@ -3,15 +3,15 @@
   "updated_at": "2026-09-05",
   "catalog_url": "https://raw.githubusercontent.com/quangman2211/speckit-catalog/main/bundle-catalog.json",
   "bundles": {
-    "retail-sdd": {
-      "id": "retail-sdd",
-      "name": "Retail SDD",
+    "qm-sdd": {
+      "id": "qm-sdd",
+      "name": "QM SDD",
       "version": "2.0.0",
       "role": "developer",
       "description": "Bo Spec-Driven Development day du: tang du an (blueprint, kien truc, hop dong, roadmap, cat lat) noi vao vong specify-implement cua spec-kit",
       "author": "Quang Man",
       "license": "MIT",
-      "download_url": "https://github.com/quangman2211/speckit-catalog/releases/download/latest/retail-sdd-2.0.0.zip",
+      "download_url": "https://github.com/quangman2211/speckit-catalog/releases/download/latest/qm-sdd-2.0.0.zip",
       "requires": {
         "speckit_version": ">=0.9.0",
         "tools": [],
@@ -21,12 +21,12 @@
         "extensions": 3
       },
       "tags": [
-        "retail",
         "sdd",
         "blueprint",
-        "roadmap"
+        "roadmap",
+        "masterplan"
       ],
-      "sha256": "15d9acfc6f1b11384a28f5fb46c2c09a5a3879014d82d3956835c828ffe383b6"
+      "sha256": "4101a7080373f38310208c83f0709a10192e855ae1b63fff6652f23d0dd73e00"
     }
   }
 }
