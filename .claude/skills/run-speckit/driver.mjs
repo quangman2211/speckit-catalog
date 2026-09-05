@@ -21,6 +21,9 @@ import { fileURLToPath } from 'node:url';
 const SKILL_DIR = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.SPECKIT_CATALOG_PORT || 8777);
 const CATALOG_URL = `http://localhost:${PORT}/catalog.json`;
+// Bundle la mot stack catalog RIENG — payload khac (object `bundles`), lenh dang
+// ky khac (`bundle catalog add --id/--policy`). Mot file khong phuc vu ca hai.
+const BUNDLE_CATALOG_URL = `http://localhost:${PORT}/bundle-catalog.json`;
 const ZIP_BASE_URL = `http://localhost:${PORT}/dist`;
 
 // Repo catalog = 3 cap tren skill dir. Van cho phep ghi de bang bien moi truong.
@@ -203,8 +206,18 @@ async function e2e() {
       return r.code === 0 || r.out;
     });
 
-    check('bundle install thanh cong sau khi co catalog', () => {
-      const r = spec(['bundle', 'install', art], at);
+    check('dang ky BUNDLE catalog noi bo', () => {
+      const r = spec(['bundle', 'catalog', 'add', BUNDLE_CATALOG_URL,
+        '--id', 'quangman', '--priority', '1', '--policy', 'install-allowed'], at);
+      return r.code === 0 || r.out;
+    });
+
+    // Cai THEO TEN, khong theo duong dan zip — day moi la duong ma README bao
+    // dev lam. Truoc khi build.sh sinh bundle-catalog.json, duong nay luon bao
+    // "not found in any configured catalog" trong khi cai theo path van chay,
+    // nen huong dan sai ma e2e van xanh.
+    check('bundle install THEO TEN sau khi co ca hai catalog', () => {
+      const r = spec(['bundle', 'install', 'retail-sdd'], at);
       if (r.code !== 0) return r.out;
       note(r.out.trim().split('\n').pop());
     });

@@ -16,7 +16,7 @@ chứa danh sách đầy đủ các bẫy của `specify` CLI đã được veri
 
 ```bash
 ./scripts/bump.sh <ext-id> <x.y.z>   # bump extension + MỌI bundle pin nó (+ patch bundle)
-./scripts/build.sh                   # zip extensions/* → dist/, sinh catalog.json (URL prod), build bundle
+./scripts/build.sh                   # zip extensions/* → dist/, sinh catalog.json + bundle-catalog.json, build bundle
 ./scripts/build.sh <zip_base_url> [catalog_url]   # override URL cho test local
 ```
 
@@ -64,6 +64,14 @@ extension ship sẵn trong `specify-cli`, hoặc một catalog active có
 
 **`catalog.json` là file sinh ra.** Không sửa tay; chạy `./scripts/build.sh`.
 
+**Bundle có stack catalog RIÊNG.** `specify` không đọc bundle từ `catalog.json` —
+payload bundle phải là file khác với object `bundles` ở top level, đăng ký bằng
+`specify bundle catalog add <url> --id <name> --policy install-allowed` (chú ý cờ
+khác hẳn `extension catalog add ... --name ... --install-allowed`). `build.sh` sinh
+`bundle-catalog.json` cho việc này. Thiếu file đó thì `bundle install <id>` theo tên
+luôn báo `not found in any configured catalog`, trong khi cài theo đường dẫn zip vẫn
+chạy — nên lỗi này ẩn rất lâu nếu chỉ test bằng path.
+
 **`.claude/skills/run-speckit/` là bản gốc duy nhất của skill + driver.** Các
 project nối vào bằng symlink (`ln -s ../../../speckit-catalog/.claude/skills/run-speckit`),
 không copy. Driver tự định vị repo catalog bằng cách đi lên 3 cấp từ vị trí *thật*
@@ -108,13 +116,15 @@ hình catalog sai. `e2e` khẳng định cả chiều âm: chưa đăng ký cata
 ./scripts/build.sh
 cd ../Retail-OPS && node .claude/skills/run-speckit/driver.mjs all   # verify trước khi publish
 git add -A && git commit -m "blueprint 0.2.0: <mô tả>"
-git push                                    # catalog.json phải lên `main` trước
+git push                                    # catalog.json + bundle-catalog.json phải lên `main` trước
 gh release upload latest dist/*.zip --clobber
 ```
 
 Remote: `quangman2211/speckit-catalog` (public). `catalog_url` là raw của nhánh
 `main`, `download_url` trỏ tới **rolling tag `latest`** — nên release và
 `catalog.json` phải cập nhật cùng lúc, và `--clobber` là bắt buộc vì asset trùng tên.
+`bundle-catalog.json` có `sha256` của artifact bundle, nên build lại thì **phải**
+upload lại zip — nếu không sha ghi trong catalog sẽ lệch với file trên release.
 Catalog public: dev khác không cần token.
 
 Đẩy vào project đang dùng: `node <driver> update [project]`. **Đừng dùng

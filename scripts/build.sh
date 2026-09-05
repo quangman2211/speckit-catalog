@@ -76,3 +76,49 @@ print(f"wrote catalog.json ({len(extensions)} extension(s), zips={base_url})")
 PY
 
 build_bundles
+
+# Bundle catalog la mot stack RIENG voi extension catalog (`specify bundle
+# catalog add`, payload bat buoc co object `bundles`). Khong sinh file nay thi
+# `specify bundle install <id>` theo ten luon bao "not found in any configured
+# catalog" — bundle chi cai duoc tu duong dan zip.
+python3 - "$ROOT" "$BASE_URL" "$CATALOG_URL" <<'BPY'
+import json, sys, datetime, pathlib, hashlib, yaml
+
+root = pathlib.Path(sys.argv[1])
+base_url = sys.argv[2].rstrip("/")
+catalog_url = sys.argv[3]
+# Cung thu muc voi catalog.json, khac ten file.
+bundle_catalog_url = catalog_url.rsplit("/", 1)[0] + "/bundle-catalog.json"
+dist = root / "dist"
+
+bundles = {}
+for manifest in sorted(root.glob("bundles/*/bundle.yml")):
+    data = yaml.safe_load(manifest.read_text())
+    b = data["bundle"]
+    artifact = dist / f"{b['id']}-{b['version']}.zip"
+    entry = {
+        "id": b["id"],
+        "name": b["name"],
+        "version": b["version"],
+        "role": b.get("role", "developer"),
+        "description": b["description"],
+        "author": b.get("author", ""),
+        "license": b.get("license", "MIT"),
+        "download_url": f"{base_url}/{b['id']}-{b['version']}.zip",
+        "requires": data.get("requires", {"speckit_version": ">=0.9.0"}),
+        "provides": {k: len(v) for k, v in (data.get("provides") or {}).items()},
+        "tags": data.get("tags", []),
+    }
+    if artifact.is_file():
+        entry["sha256"] = hashlib.sha256(artifact.read_bytes()).hexdigest()
+    bundles[b["id"]] = entry
+
+out = root / "bundle-catalog.json"
+out.write_text(json.dumps({
+    "schema_version": "1.0",
+    "updated_at": datetime.date.today().isoformat(),
+    "catalog_url": bundle_catalog_url,
+    "bundles": bundles,
+}, indent=2, ensure_ascii=False) + "\n")
+print(f"wrote bundle-catalog.json ({len(bundles)} bundle(s))")
+BPY

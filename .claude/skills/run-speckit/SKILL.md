@@ -135,12 +135,19 @@ cd ~/Quang-Man-Project/speckit-catalog
 # 1. sửa code trong extensions/<id>/
 # 2. bump version cho extension VÀ mọi bundle pin nó, trong một thao tác
 ./scripts/bump.sh blueprint 0.2.0
-# 3. sinh lại artifact + catalog.json với URL production
+# 3. sinh lại artifact + catalog.json + bundle-catalog.json với URL production
 ./scripts/build.sh
 git add -A && git commit -m "blueprint 0.2.0: <mô tả bug fix>"
 ```
 
-Publish: tạo GitHub release, upload `dist/*.zip`, push `catalog.json`.
+Publish: tạo GitHub release, upload `dist/*.zip`, push `catalog.json` **và**
+`bundle-catalog.json`.
+
+Bundle dùng stack catalog riêng: `specify bundle catalog add <url> --id <name>
+--policy install-allowed` (extension thì là `--name` + `--install-allowed`). Thiếu
+`bundle-catalog.json` thì `bundle install <id>` theo tên báo `not found in any
+configured catalog` còn cài theo path vẫn chạy — nên phải test theo tên, `e2e` có
+check đúng chỗ đó.
 
 Verify trước khi publish — chạy từ một project bất kỳ có symlink skill:
 
