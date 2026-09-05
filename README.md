@@ -7,8 +7,8 @@ catalog extension nội bộ, bundle, và skill `run-speckit` để chạy/verif
 .claude/skills/run-speckit/   # skill + driver — bản gốc duy nhất
   SKILL.md
   driver.mjs
-extensions/phases/            # skill theo giai doan + hook goi y
-bundles/retail-frontend/      # bundle manifest (KHÔNG chứa payload)
+extensions/masterplan/         # tang du an: blueprint, kien truc, hop dong, roadmap, cat lat
+bundles/retail-sdd/      # bundle manifest (KHÔNG chứa payload)
 scripts/bump.sh               # bump version extension + mọi bundle pin nó
 scripts/build.sh              # zip extension + sinh catalog.json + build bundle
 catalog.json                  # sinh ra, KHÔNG sửa tay
@@ -45,12 +45,12 @@ cd <project>
 specify extension catalog add \
   https://raw.githubusercontent.com/quangman2211/speckit-catalog/main/catalog.json \
   --name quangman --priority 1 --install-allowed
-specify bundle install retail-frontend
+specify bundle install retail-sdd
 specify integration upgrade claude    # noi hook `events:` — bundle install khong tu lam
 ```
 
 Catalog public nên không cần token. Chưa đăng ký catalog thì `bundle install` báo
-`Extension 'phases' not found in any catalog` — extension tự viết không đi kèm bundle.
+`Extension 'blueprint' not found in any catalog` — extension tự viết không đi kèm bundle.
 
 ## Chạy và verify
 
@@ -95,9 +95,9 @@ bao giờ bị ghi đè bằng URL localhost.
 
 ```bash
 # sửa code trong extensions/<id>/ rồi:
-./scripts/bump.sh phases 0.2.1   # bump extension + pin trong mọi bundle + version bundle
+./scripts/bump.sh blueprint 0.2.0   # bump extension + pin trong mọi bundle + version bundle
 ./scripts/build.sh                 # artifact + catalog.json với URL production
-git add -A && git commit -m "phases 0.2.1: <mô tả>"
+git add -A && git commit -m "blueprint 0.2.0: <mô tả>"
 ```
 
 Rồi đẩy artifact lên release. Tag `latest` là **rolling** — `catalog.json` luôn trỏ
@@ -127,9 +127,9 @@ Cũng đừng trông vào việc cài lại bundle mới — nó báo thành cô
 extension cũ:
 
 ```
-✓ Installed 'retail-frontend' (0 added, 3 already present).
+✓ Installed 'retail-sdd' (0 added, 3 already present).
   ✓ Frontend Workflow (v1.0.0)     ← vẫn bản cũ
-  retail-frontend v1.1.0           ← bundle báo 1.1.0
+  retail-sdd v1.1.0           ← bundle báo 1.1.0
 ```
 
 Chi tiết đầy đủ các bẫy nằm ở `.claude/skills/run-speckit/SKILL.md`.

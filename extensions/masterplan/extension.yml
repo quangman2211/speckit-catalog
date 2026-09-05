@@ -1,0 +1,95 @@
+schema_version: "1.0"
+
+extension:
+  id: masterplan
+  name: "Masterplan"
+  version: "0.1.0"
+  description: "Tang du an cho spec-kit: hoi dap dung blueprint, thiet ke he thong, ghi ADR va hop dong dung chung, roi cat du an thanh cac lat — moi lat la mot prompt dan vao /speckit.specify"
+  author: "Quang Man"
+  repository: "https://github.com/quangman2211/speckit-catalog"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=0.9.0"
+
+provides:
+  commands:
+    - name: speckit.masterplan.architect
+      file: commands/architect.md
+      description: "Hoi dap tung vong de dung docs/01-blueprint.md tu con so khong: ai dung, dau la mot chay duoc dau tien, cai gi co y khong lam"
+    - name: speckit.masterplan.design
+      file: commands/design.md
+      description: "Tu blueprint viet docs/02-architecture.md: thanh phan, luong du lieu, ranh gioi, quy mo that, va cac danh doi da can nhac"
+    - name: speckit.masterplan.decide
+      file: commands/decide.md
+      description: "Ghi mot quyet dinh mot chieu thanh ADR co danh so trong docs/04-decisions/, kem phuong an da loai va he qua"
+    - name: speckit.masterplan.contracts
+      file: commands/contracts.md
+      description: "Sinh hop dong cap du an trong contracts/ — mo hinh du lieu, API, giao dien, su kien — thu ma moi lat deu doc va khong lat nao duoc tu sua"
+    - name: speckit.masterplan.slice
+      file: commands/slice.md
+      description: "Cat du an thanh cac lat mong demo duoc, ghi docs/05-roadmap.md va mot file prompt cho tung lat trong docs/slices/"
+    - name: speckit.masterplan.check
+      file: commands/check.md
+      description: "Chay chin tieu chi tu kiem tren roadmap va cac prompt lat: ten lat, phu thuoc nguoc, do dai prompt, tu khoa framework, cho con treo"
+    - name: speckit.masterplan.next
+      file: commands/next.md
+      description: "Bao lat ke tiep, kiem cong chan cua no, roi in nguyen prompt de dan vao /speckit.specify"
+    - name: speckit.masterplan.status
+      file: commands/status.md
+      description: "Bao dang o tang blueprint hay tang lat, artifact nao da co, con thieu gi"
+
+  config:
+    - name: "masterplan-config.yml"
+      template: "config-template.yml"
+      description: "Duong dan artifact va bat/tat goi y"
+      required: false
+
+  scripts:
+    - name: state
+      file: scripts/bash/state.sh
+      description: "Nhan dien tang du an, in JSON trang thai"
+      runtimes:
+        - bash
+    - name: check
+      file: scripts/bash/check.sh
+      description: "Bay tieu chi tu kiem chay duoc bang script"
+      runtimes:
+        - bash
+    - name: suggest
+      file: scripts/bash/suggest.sh
+      description: "Hook entry: format goi y tu trang thai"
+      runtimes:
+        - bash
+
+hooks:
+  before_specify:
+    command: speckit.masterplan.next
+    optional: true
+    priority: 20
+    prompt: "Kiem cong chan cua lat nay truoc khi specify?"
+    description: "Lat co cong chan chua mo thi specify se dua tren mot quyet dinh chua ai chot"
+
+events:
+  user_prompt_submit:
+    command: speckit.masterplan.status
+    timeout: 10
+
+tags:
+  - "sdd"
+  - "blueprint"
+  - "roadmap"
+  - "architecture"
+
+config:
+  defaults:
+    enabled: true
+    repeat_after: 10
+    blueprint: "docs/01-blueprint.md"
+    architecture: "docs/02-architecture.md"
+    adr_dir: "docs/04-decisions"
+    roadmap: "docs/05-roadmap.md"
+    slice_dir: "docs/slices"
+    contracts_dir: "contracts"
+    prompt_min_lines: 10
+    prompt_max_lines: 25

@@ -1,0 +1,26 @@
+schema_version: "1.0"
+
+bundle:
+  id: "retail-sdd"
+  name: "Retail SDD"
+  version: "2.0.0"
+  role: "developer"
+  description: "Bo Spec-Driven Development day du: tang du an (blueprint, kien truc, hop dong, roadmap, cat lat) noi vao vong specify-implement cua spec-kit"
+  author: "Quang Man"
+  license: "MIT"
+
+requires:
+  speckit_version: ">=0.9.0"
+  tools: []
+  mcp: []
+
+provides:
+  extensions:
+    - id: "git"
+      version: "1.0.0"
+    - id: "agent-context"
+      version: "1.0.0"
+    - id: "masterplan"
+      version: "0.1.0"
+
+tags: ["retail", "sdd", "blueprint", "roadmap"]

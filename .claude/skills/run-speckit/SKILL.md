@@ -26,7 +26,7 @@ FATAL: '/…/speckit-catalog' khong phai spec-kit project (thieu .specify/).
 | Thành phần | Vị trí | Vai trò |
 |---|---|---|
 | Skill + driver | `speckit-catalog/.claude/skills/run-speckit/` | Bản gốc duy nhất |
-| Catalog repo | `speckit-catalog/` | Extension `phases` + bundle `retail-frontend` |
+| Catalog repo | `speckit-catalog/` | Extension `masterplan` + bundle `retail-sdd` |
 | Symlink trong project | `<project>/.claude/skills/run-speckit` | Để Claude Code thấy skill |
 | Toolchain | `<project>/.specify/`, `<project>/.claude/skills/speckit-*` | 16 skill SDD + template |
 | Constitution | `<project>/.specify/memory/constitution.md` | Luật project |
@@ -87,7 +87,7 @@ Driver làm gì bên trong:
 3. Bật `python3 -m http.server 8777` phục vụ bản sao.
 4. Tạo project spec-kit trắng trong `$TMPDIR`, `specify init`, rồi:
    - khẳng định `bundle install` **thất bại** khi chưa đăng ký catalog,
-   - đăng ký catalog, cài lại, khẳng định đủ 3 extension, 8 skill `phases`,
+   - đăng ký catalog, cài lại, khẳng định đủ 3 extension, 8 skill `blueprint`,
      và hook `UserPromptSubmit` đã vào `.claude/settings.json`,
    - khẳng định token `__SPECKIT_COMMAND_*__` đã render thành `/speckit-*`.
 5. Dọn sạch project tạm và bản sao.
@@ -134,10 +134,10 @@ Làm trong repo `speckit-catalog`, **không bao giờ sửa trực tiếp trong
 cd ~/Quang-Man-Project/speckit-catalog
 # 1. sửa code trong extensions/<id>/
 # 2. bump version cho extension VÀ mọi bundle pin nó, trong một thao tác
-./scripts/bump.sh phases 0.2.1
+./scripts/bump.sh blueprint 0.2.0
 # 3. sinh lại artifact + catalog.json với URL production
 ./scripts/build.sh
-git add -A && git commit -m "phases 0.2.1: <mô tả bug fix>"
+git add -A && git commit -m "blueprint 0.2.0: <mô tả bug fix>"
 ```
 
 Publish: tạo GitHub release, upload `dist/*.zip`, push `catalog.json`.
@@ -162,12 +162,12 @@ extension của catalog đang có mặt trong project đó. Config đã tuỳ ch
 Thử nhanh khi đang sửa, chưa muốn bump version:
 
 ```bash
-specify extension add --dev ~/Quang-Man-Project/speckit-catalog/extensions/phases
+specify extension add --dev ~/Quang-Man-Project/speckit-catalog/extensions/masterplan
 ```
 
 ## Gotchas
 
-**Bundle không chứa payload của extension.** Artifact `retail-frontend-1.0.0.zip`
+**Bundle không chứa payload của extension.** Artifact `retail-sdd-1.0.0.zip`
 chỉ có đúng 2 file (`bundle.yml` + `README.md`). Lúc install, `specify` chỉ giải
 quyết extension theo 2 đường: extension ship sẵn trong `specify-cli`, hoặc catalog
 đang active có `install_allowed`. Không có đường đọc payload từ thư mục bundle.
@@ -194,7 +194,7 @@ unreachable); reference left unchecked.` Chỉ `bundle install` trên project tr
 là bằng chứng.
 
 **`bundle install <path>` với path không tồn tại bị hiểu là bundle id**, và lỗi trả
-về gây hiểu nhầm: `Bundle '/…/retail-frontend-1.0.0.zip' was not found in any
+về gây hiểu nhầm: `Bundle '/…/retail-sdd-1.0.0.zip' was not found in any
 configured catalog.` Kiểm tra file có tồn tại trước.
 
 **`scripts/build.sh` chạy `rm -rf dist/`.** Nó phải build bundle artifact *sau* khi
@@ -240,12 +240,12 @@ vẫn tải version mới, và **giữ nguyên config đã tuỳ chỉnh**
 hiểm nhất. Kiểm tra idempotent theo **id**, không so version:
 
 ```
-$ specify bundle install retail-frontend-1.1.0.zip
-✓ Installed 'retail-frontend' (0 added, 3 already present).
+$ specify bundle install retail-sdd-1.1.0.zip
+✓ Installed 'retail-sdd' (0 added, 3 already present).
 $ specify extension list | grep Frontend
   ✓ Frontend Workflow (v1.0.0)     <-- van la ban cu, bug fix khong vao
 $ specify bundle list | grep retail
-  retail-frontend v1.1.0           <-- bundle bao 1.1.0
+  retail-sdd v1.1.0           <-- bundle bao 1.1.0
 ```
 
 Bundle ghi nhận 1.1.0, pin frontend 1.0.1, nhưng project thực tế vẫn chạy 1.0.0.
@@ -258,7 +258,7 @@ hai cùng lúc thay vì sửa tay.
 
 **`specify bundle update <id>` cần bundle nằm trong một *bundle catalog*.** Bundle
 cài từ file `.zip` local không update theo id được:
-`Error: Bundle 'retail-frontend' was not found in any configured catalog.`
+`Error: Bundle 'retail-sdd' was not found in any configured catalog.`
 Với phân phối local, đường cập nhật là cài lại artifact mới rồi `driver.mjs update`.
 
 ## Troubleshooting

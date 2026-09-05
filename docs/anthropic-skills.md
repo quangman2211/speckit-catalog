@@ -184,7 +184,7 @@ Cài dạng plugin thì tên có tiền tố: `engineering:system-design`, `desi
 ### Ba đặc điểm phải biết trước khi dùng
 
 1. **Không skill nào ghi file.** Cả 25 chỉ in markdown ra chat. Muốn có artifact
-   nằm trong repo thì phải tự thêm lớp ghi file — đó là việc extension `phases`
+   nằm trong repo thì phải tự thêm lớp ghi file — đó là việc extension `masterplan`
    của bộ kit này làm.
 2. **Không có khái niệm giai đoạn.** Mỗi skill độc lập, kích hoạt bằng
    description matching. Thứ tự là thứ mình áp vào.

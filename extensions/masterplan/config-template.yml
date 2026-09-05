@@ -1,0 +1,22 @@
+# Cau hinh extension `masterplan` — tang du an cua spec-kit.
+# Sua file nay trong project cua ban, khong sua trong catalog.
+
+# Tat toan bo goi y tu dong (hook user_prompt_submit)
+enabled: true
+
+# Sau bao nhieu luot thi nhac lai cung mot goi y
+repeat_after: 10
+
+# Duong dan artifact tang du an. Doi duoc, nhung doi roi thi doi ca noi khac
+# dang tro toi — extension `gates` sau nay doc chinh nhung duong dan nay.
+blueprint: "docs/01-blueprint.md"
+architecture: "docs/02-architecture.md"
+adr_dir: "docs/04-decisions"
+roadmap: "docs/05-roadmap.md"
+slice_dir: "docs/slices"
+contracts_dir: "contracts"
+
+# Do dai mot prompt lat, tinh bang dong khong trong.
+# Dai hon = lat om qua nhieu quyet dinh. Ngan hon = chua du de specify.
+prompt_min_lines: 10
+prompt_max_lines: 25

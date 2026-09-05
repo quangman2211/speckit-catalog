@@ -176,9 +176,9 @@ async function e2e() {
 
   const dist = join(STAGE, 'dist');
   const bundleZip = existsSync(dist)
-    ? readdirSync(dist).filter((f) => f.startsWith('retail-frontend-') && f.endsWith('.zip')).sort().pop()
+    ? readdirSync(dist).filter((f) => f.startsWith('retail-sdd-') && f.endsWith('.zip')).sort().pop()
     : null;
-  const art = bundleZip ? join(dist, bundleZip) : join(dist, 'retail-frontend.zip');
+  const art = bundleZip ? join(dist, bundleZip) : join(dist, 'retail-sdd.zip');
   if (!existsSync(art)) { bad('bundle artifact ton tai', 'chua build — chay `build` truoc `e2e`'); return; }
 
   let tmp;
@@ -211,15 +211,15 @@ async function e2e() {
 
     check('ca 3 extension co mat sau install', () => {
       const r = spec(['extension', 'list'], at);
-      const missing = ['Git Branching', 'Coding Agent Context', 'Phase Skills']
+      const missing = ['Git Branching', 'Coding Agent Context', 'Masterplan']
         .filter((n) => !r.out.includes(n));
       return missing.length === 0 || `thieu: ${missing.join(', ')}`;
     });
 
-    check('phases: 8 skill da dang ky', () => {
-      const have = readdirSync(join(tmp, '.claude', 'skills')).filter((d) => d.startsWith('speckit-phases-'));
+    check('masterplan: 8 skill da dang ky', () => {
+      const have = readdirSync(join(tmp, '.claude', 'skills')).filter((d) => d.startsWith('speckit-masterplan-'));
       note(`${have.length}: ${have.join(', ')}`);
-      return have.length === 8 || `mong doi 8 skill phases, co ${have.length}`;
+      return have.length === 8 || `mong doi 8 skill masterplan, co ${have.length}`;
     });
 
     // `bundle install` cai extension nhung KHONG goi _refresh_events_and_warn —
@@ -232,7 +232,7 @@ async function e2e() {
       const s = JSON.parse(readFileSync(p, 'utf8'));
       const has = ((s.hooks && s.hooks.UserPromptSubmit) || [])
         .flatMap((e) => (e.hooks || []).map((h) => h.command || ''))
-        .some((c) => c.includes('speckit.phases.suggest'));
+        .some((c) => c.includes('speckit.masterplan.status'));
       return !has || 'upstream da sua: bundle install nay tu ghi hook — bo buoc noi day o README';
     });
 
@@ -241,31 +241,52 @@ async function e2e() {
       return r.code === 0 || r.out;
     });
 
-    check('phases: hook UserPromptSubmit da ghi vao .claude/settings.json', () => {
+    check('masterplan: hook UserPromptSubmit da ghi vao .claude/settings.json', () => {
       const p = join(tmp, '.claude', 'settings.json');
       if (!existsSync(p)) return 'khong co .claude/settings.json — khoi `events:` khong duoc ghi';
       const s = JSON.parse(readFileSync(p, 'utf8'));
       const entries = (s.hooks && s.hooks.UserPromptSubmit) || [];
       const cmds = entries.flatMap((e) => (e.hooks || []).map((h) => h.command || ''));
       note(cmds.join(' | ') || '(rong)');
-      return cmds.some((c) => c.includes('speckit.phases.suggest')) || 'khong thay hook speckit.phases.suggest';
+      return cmds.some((c) => c.includes('speckit.masterplan.status')) || 'khong thay hook speckit.masterplan.status';
     });
 
-    check('phases: script co bit +x va chay duoc', () => {
-      const dir = join(tmp, '.specify', 'extensions', 'phases', 'scripts', 'bash');
-      if (!existsSync(dir)) return 'khong thay scripts/bash cua phases';
+    check('masterplan: script co bit +x, state.sh nhan dien dung tang', () => {
+      const dir = join(tmp, '.specify', 'extensions', 'masterplan', 'scripts', 'bash');
+      if (!existsSync(dir)) return 'khong thay scripts/bash cua masterplan';
       const shs = readdirSync(dir).filter((f) => f.endsWith('.sh'));
       const notExec = shs.filter((f) => !(statSync(join(dir, f)).mode & 0o111));
       if (notExec.length) return `thieu bit +x: ${notExec.join(', ')}`;
-      const r = run(join(dir, 'phase.sh'), [tmp]);
-      if (r.code !== 0) return `phase.sh loi: ${r.out}`;
-      const phase = JSON.parse(r.out).phase;
-      note(`${shs.length} script, phase.sh -> "${phase}"`);
-      return phase === 'spec' || `mong doi phase "spec" tren project vua init, nhan "${phase}"`;
+      const r = run(join(dir, 'state.sh'), [tmp]);
+      if (r.code !== 0) return `state.sh loi: ${r.out}`;
+      const alt = JSON.parse(r.out).altitude;
+      note(`${shs.length} script, state.sh -> "${alt}"`);
+      return alt === 'blueprint' || `mong doi altitude "blueprint" tren project vua init, nhan "${alt}"`;
+    });
+
+    // check.sh phai that bai co kiem soat khi chua co roadmap — day la trang
+    // thai binh thuong cua mot project vua init, khong duoc coi la crash.
+    check('masterplan: check.sh bao thieu roadmap thay vi no', () => {
+      const sh = join(tmp, '.specify', 'extensions', 'masterplan', 'scripts', 'bash', 'check.sh');
+      const r = run(sh, [tmp]);
+      if (r.code === 0) return 'check.sh exit 0 khi chua co roadmap — phai exit 1';
+      return /khong tim thay/.test(r.out) || `bao loi khac mong doi: ${r.out}`;
+    });
+
+    // Hook chay moi luot o moi repo. Tren project vua init no phai in goi y
+    // blueprint, va lan thu hai phai im — neu khong se on ao den muc bi go.
+    check('masterplan: hook in mot lan roi im', () => {
+      const sh = join(tmp, '.specify', 'extensions', 'masterplan', 'scripts', 'bash', 'suggest.sh');
+      const io = { cwd: tmp, input: '{"prompt":"x"}', stdio: ['pipe', 'pipe', 'pipe'] };
+      const first = run(sh, [], io);
+      if (!/masterplan-hint/.test(first.out)) return `luot dau khong in goi y: ${first.out}`;
+      if (!/speckit-masterplan-architect/.test(first.out)) return 'khong goi y architect tren project trang';
+      const second = run(sh, [], io);
+      return second.out.trim() === '' || `luot hai phai im, nhung in: ${second.out}`;
     });
 
     check('token __SPECKIT_COMMAND_*__ da render thanh /speckit-*', () => {
-      const body = readFileSync(join(tmp, '.claude', 'skills', 'speckit-phases-a11y', 'SKILL.md'), 'utf8');
+      const body = readFileSync(join(tmp, '.claude', 'skills', 'speckit-masterplan-next', 'SKILL.md'), 'utf8');
       if (body.includes('__SPECKIT_COMMAND_')) return 'con token chua render trong SKILL.md';
       return /\/speckit-implement/.test(body) || 'khong thay /speckit-implement sau khi render';
     });

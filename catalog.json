@@ -3,22 +3,22 @@
   "updated_at": "2026-09-05",
   "catalog_url": "https://raw.githubusercontent.com/quangman2211/speckit-catalog/main/catalog.json",
   "extensions": {
-    "phases": {
-      "id": "phases",
-      "name": "Phase Skills",
-      "version": "0.2.0",
-      "description": "Sau skill theo giai doan spec/plan — spec, kien truc, ADR, hop dong giao dien, he thiet ke, cong a11y — cong hook tu nhan dien giai doan va goi y skill dung luc",
+    "masterplan": {
+      "id": "masterplan",
+      "name": "Masterplan",
+      "version": "0.1.0",
+      "description": "Tang du an cho spec-kit: hoi dap dung blueprint, thiet ke he thong, ghi ADR va hop dong dung chung, roi cat du an thanh cac lat — moi lat la mot prompt dan vao /speckit.specify",
       "author": "Quang Man",
-      "license": "Apache-2.0",
-      "download_url": "https://github.com/quangman2211/speckit-catalog/releases/download/latest/phases-0.2.0.zip",
+      "license": "MIT",
+      "download_url": "https://github.com/quangman2211/speckit-catalog/releases/download/latest/masterplan-0.1.0.zip",
       "requires": {
         "speckit_version": ">=0.9.0"
       },
       "tags": [
         "sdd",
-        "phases",
-        "architecture",
-        "design-system"
+        "blueprint",
+        "roadmap",
+        "architecture"
       ],
       "repository": "https://github.com/quangman2211/speckit-catalog"
     }
